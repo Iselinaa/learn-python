@@ -1,9 +1,20 @@
 import random
 import os
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 board = []
 tries = 5
-board_size = 10
+board_size = 5
 ships = []
 total_ships = 5
 
@@ -12,8 +23,11 @@ for x in range(0, board_size):
 
 def print_board(board):
   for row in board:
-      print(" ".join(row))
-
+      output = " ".join(row)
+      output = output.replace("X", f"{bcolors.FAIL}X{bcolors.ENDC}")
+      output = output.replace("S", f"{bcolors.OKGREEN}S{bcolors.ENDC}")
+      output = output.replace("O", f"{bcolors.OKCYAN}O{bcolors.ENDC}")
+      print(output)
 print_board(board)
 
 def random_row(board):
@@ -34,6 +48,7 @@ for s in range(0, total_ships):
     if found_ship_with_same_coordinates:
       continue
     ships.append([ship_row, ship_col])
+    break
 # print(ships)
 
 while tries > 0:
@@ -44,23 +59,23 @@ while tries > 0:
         print("Wrong coordinates!")
         continue
 
-    # print(ship_row)
-    # print(ship_col)
-
-    # Write your code below!
-    if guess_row == ship_row and guess_col == ship_col:
-        os.system('cls' if os.name == 'nt' else 'clear')
+    hit_ship = False
+    for ship in ships:
+      if ship[0] == guess_row and ship[1] == guess_col:
         print("Congratulations! You sank my battleship!")
+        hit_ship = True
         break
-    else:
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print("You missed my battleship!")
-        board[guess_row][guess_col] = 'X'
-        tries -= 1
-        print('You have ' + str(tries) + ' left!')
-        print_board(board)
+    if not hit_ship:
+      os.system('cls' if os.name == 'nt' else 'clear')
+      print("You missed my battleship!")
+      board[guess_row][guess_col] = 'X'
+      tries -= 1
+      print('You have ' + str(tries) + ' left!')
+      print_board(board)   
+
 if tries == 0:
     os.system('cls' if os.name == 'nt' else 'clear')
     print('You lost!' )
-    board[ship_row][ship_col] = 'S'
+    for ship in ships:
+      board[ship[0]][ship[1]] = 'S'
     print_board(board)
