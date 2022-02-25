@@ -23,8 +23,16 @@ def random_col(board):
   return random.randint(0, len(board) - 1)
 
 for s in range(0, total_ships):
+  while True:
     ship_row = random_row(board)
     ship_col = random_col(board)
+    found_ship_with_same_coordinates = False
+    for coordinate in ships:
+      if ship_row == coordinate[0] and ship_col == coordinate[1]:
+        found_ship_with_same_coordinates = True
+        break
+    if found_ship_with_same_coordinates:
+      continue
     ships.append([ship_row, ship_col])
 # print(ships)
 
