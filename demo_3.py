@@ -27,6 +27,7 @@ def print_board(board):
       output = output.replace("X", f"{bcolors.FAIL}X{bcolors.ENDC}")
       output = output.replace("S", f"{bcolors.OKGREEN}S{bcolors.ENDC}")
       output = output.replace("O", f"{bcolors.OKCYAN}O{bcolors.ENDC}")
+      output = output.replace("H", f"{bcolors.WARNING}H{bcolors.ENDC}")
       print(output)
 print_board(board)
 
@@ -62,7 +63,10 @@ while tries > 0:
     hit_ship = False
     for ship in ships:
       if ship[0] == guess_row and ship[1] == guess_col:
+        os.system('cls' if os.name == 'nt' else 'clear')
         print("Congratulations! You sank my battleship!")
+        board[guess_row][guess_col] = 'H'
+        print_board(board)
         hit_ship = True
         break
     if not hit_ship:
